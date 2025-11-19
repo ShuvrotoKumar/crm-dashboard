@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+.next-static/
+out/
+.vercel/
+.turbo/
+
+# Build artifacts
+build/
+dist/
+coverage/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor / OS files
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/
+*.iml
+
+# Env and secrets
+.env
+.env.local
+.env.*.local
+
+# Misc
+*.pid
+*.seed
+*.tgz
+
+# Generated lockfiles (keep only the one you use)
+# Uncomment if you dont want to commit these
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
