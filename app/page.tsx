@@ -29,7 +29,8 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { ContactsSection } from "@/components/ContactsSection";
 import { AnalyticsSection } from "@/components/AnalyticsSection";
 import { SalesPipelineSection } from "@/components/SalesPipelineSection";
@@ -121,7 +122,7 @@ const kpis = [
   },
 ];
 
-const contacts = [
+const initialContacts = [
   {
     name: "Sophia Carter",
     company: "Aurora Labs",
@@ -190,6 +191,26 @@ function statusColor(status: string) {
 
 export default function Page() {
   const [activeSection, setActiveSection] = useState<string>("Analytics");
+  const [showAddContact, setShowAddContact] = useState(false);
+  const [contacts, setContacts] = useState(initialContacts);
+  const [newContact, setNewContact] = useState({
+    name: "",
+    company: "",
+    phone: "",
+    status: "Active",
+  });
+
+  // Lock body scroll while modal is open
+  useEffect(() => {
+    if (showAddContact) {
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.body.style.overflow = prev;
+      };
+    }
+    return;
+  }, [showAddContact]);
 
   return (
     <main className="px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
@@ -209,15 +230,11 @@ export default function Page() {
                   <Sparkles className="h-4 w-4 text-black" />
                 </div>
                 <div>
-                  <p className="text-sm font-medium tracking-wide text-white/80">
-                    LUX CRM
-                  </p>
+                  <p className="text-sm font-medium tracking-wide text-white/80">LUX CRM</p>
                   <p className="text-[11px] text-white/40">Revenue Workspace</p>
                 </div>
               </div>
-              <span className="rounded-full bg-white/10 px-2 py-1 text-[10px] uppercase tracking-wide text-white/60">
-                v2.4
-              </span>
+              <span className="rounded-full bg-white/10 px-2 py-1 text-[10px] uppercase tracking-wide text-white/60">v2.4</span>
             </div>
 
             {/* Nav */}
@@ -328,10 +345,105 @@ export default function Page() {
               <button className="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 bg-black/40 text-white/70 shadow-[0_0_0_1px_rgba(255,255,255,0.04)] transition-all duration-200 ease-out hover:-translate-y-0.5 hover:bg-white/5">
                 <Bell className="h-4 w-4" />
               </button>
-              <button className="hidden items-center gap-2 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 px-3.5 py-2 text-xs font-semibold shadow-[0_10px_30px_rgba(15,23,42,0.85)] transition-all duration-200 ease-out hover:-translate-y-0.5 hover:from-sky-400 hover:to-indigo-400 sm:inline-flex">
-                <Plus className="h-3.5 w-3.5" />
-                <span>Add contact</span>
-              </button>
+              <button
+  className="hidden items-center gap-2 rounded-xl bg-gradient-to-r from-sky-500 to-indigo-500 px-3.5 py-2 text-xs font-semibold shadow-[0_10px_30px_rgba(15,23,42,0.85)] transition-all duration-200 ease-out hover:-translate-y-0.5 hover:from-sky-400 hover:to-indigo-400 sm:inline-flex"
+  onClick={() => setShowAddContact(true)}
+>
+  <Plus className="h-3.5 w-3.5" />
+  <span>Add contact</span>
+</button>
+{showAddContact &&
+  (typeof document !== "undefined"
+    ? createPortal(
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* backdrop: semi-opaque + blur */}
+          <div
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm"
+            onClick={() => setShowAddContact(false)}
+          />
+          <div
+            className="relative z-50 bg-[#090714] rounded-xl shadow-xl p-6 w-full max-w-md"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              className="absolute top-3 right-3 text-black/50 hover:text-black"
+              onClick={() => setShowAddContact(false)}
+              aria-label="Close add contact"
+            >
+              ×
+            </button>
+            <h2 className="text-lg font-semibold mb-4">Add Contact</h2>
+
+            <div className="space-y-3 text-sm text-white">
+              <div>
+                <label className="block text-xs text-white/80">Name</label>
+                <input
+                  name="name"
+                  value={newContact.name}
+                  onChange={(e) => setNewContact((s) => ({ ...s, name: e.target.value }))}
+                  className="mt-1 w-full rounded-md border border-white/20 bg-transparent px-3 py-2 text-sm text-white placeholder:text-white/50"
+                  placeholder="Full name"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-white/80">Company</label>
+                <input
+                  name="company"
+                  value={newContact.company}
+                  onChange={(e) => setNewContact((s) => ({ ...s, company: e.target.value }))}
+                  className="mt-1 w-full rounded-md border border-white/20 bg-transparent px-3 py-2 text-sm text-white placeholder:text-white/50"
+                  placeholder="Company"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-white/80">Phone</label>
+                <input
+                  name="phone"
+                  value={newContact.phone}
+                  onChange={(e) => setNewContact((s) => ({ ...s, phone: e.target.value }))}
+                  className="mt-1 w-full rounded-md border border-white/20 bg-transparent px-3 py-2 text-sm text-white placeholder:text-white/50"
+                  placeholder="Phone number"
+                />
+              </div>
+              <div>
+                <label className="block text-xs text-white/80">Status</label>
+                <select
+                  name="status"
+                  value={newContact.status}
+                  onChange={(e) => setNewContact((s) => ({ ...s, status: e.target.value }))}
+                  className="mt-1 w-full rounded-md border border-white/20 bg-transparent px-3 py-2 text-sm text-white"
+                >
+                  <option>Active</option>
+                  <option>Prospect</option>
+                  <option>Inactive</option>
+                </select>
+              </div>
+
+              <div className="mt-4 flex justify-end gap-2">
+                <button
+                  className="rounded-md px-3 py-2 text-sm bg-white/10 text-white"
+                  onClick={() => setShowAddContact(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="rounded-md bg-sky-600 px-3 py-2 text-sm text-white"
+                  onClick={() => {
+                    if (!newContact.name.trim()) return;
+                    setContacts((s) => [newContact, ...s]);
+                    setNewContact({ name: "", company: "", phone: "", status: "Active" });
+                    setShowAddContact(false);
+                  }}
+                >
+                  Save contact
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>,
+        document.body
+      )
+    : null)}
             </div>
           </motion.header>
 
@@ -344,7 +456,7 @@ export default function Page() {
               transition={{ duration: 0.4, ease: "easeOut", delay: 0.05 }}
               className="flex-1 space-y-6 xl:space-y-8"
             >
-              {activeSection === "Contacts" && <ContactsSection />}
+              {activeSection === "Contacts" && <ContactsSection contacts={contacts} />}
               {activeSection === "Analytics" && <AnalyticsSection />}
               {activeSection === "Sales Pipeline" && <SalesPipelineSection />}
               {activeSection === "Calendar" && <CalendarSection />}

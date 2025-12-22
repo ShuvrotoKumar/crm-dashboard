@@ -41,7 +41,7 @@ const kpis = [
   },
 ];
 
-const contacts = [
+const defaultContacts = [
   {
     name: "Sophia Carter",
     company: "Aurora Labs",
@@ -79,7 +79,16 @@ function statusColor(status: string) {
   }
 }
 
-export function ContactsSection() {
+type Contact = {
+  name: string;
+  company?: string;
+  phone?: string;
+  status?: string;
+};
+
+export function ContactsSection({ contacts }: { contacts?: Contact[] }) {
+  const list = contacts ?? defaultContacts;
+
   return (
     <div className="flex-1 space-y-6 xl:space-y-8">
       {/* KPIs */}
@@ -133,7 +142,7 @@ export function ContactsSection() {
           </div>
         </div>
         <div className="divide-y divide-white/5 px-4 py-2 sm:px-5 sm:py-3">
-          {contacts.map((contact, index) => (
+          {list.map((contact, index) => (
             <motion.div
               key={contact.name}
               initial={{ opacity: 0, y: 6 }}
@@ -158,7 +167,7 @@ export function ContactsSection() {
               </div>
               <span
                 className={`rounded-full border px-2.5 py-1 text-[11px] font-medium transition-colors duration-200 ease-out ${statusColor(
-                  contact.status
+                  contact.status ?? ""
                 )}`}
               >
                 {contact.status}
