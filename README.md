@@ -1,20 +1,34 @@
-📊 CRM Dashboard
+CRM Dashboard
 
-A modern and scalable CRM Dashboard built with Next.js and TypeScript to manage customer data, contacts, and business interactions through a clean and responsive interface.
+This is a CRM Dashboard project built with Next.js (App Router) and TypeScript, designed to manage customer contacts and business data through a clean and responsive interface.
 
-✨ Features
+Getting Started
 
-Dashboard overview
+First, run the development server:
 
-Contact management (modal-based)
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 
-Modular & reusable components
 
-Responsive UI
+Open
+👉 http://localhost:3000
 
-Clean and maintainable architecture
+with your browser to see the result.
 
-🛠 Tech Stack
+Project Structure
+
+You can start editing the application by modifying files inside the app/ directory.
+The project uses a modular structure for better scalability and maintainability.
+
+app/            # App Router pages & layouts
+components/     # Reusable UI components
+
+Tech Stack
 
 Next.js (App Router)
 
@@ -24,31 +38,45 @@ Tailwind CSS
 
 PostCSS
 
-npm
+Node.js / npm
 
-📂 Project Structure
-app/            # App router pages & layouts
-components/     # Reusable UI components
+Features
 
-⚙️ Getting Started
-git clone https://github.com/ShuvrotoKumar/crm-dashboard.git
-cd crm-dashboard
-npm install
-npm run dev
+Dashboard layout
 
+Contact management with modal support
 
-App runs at:
-http://localhost:3000
+Reusable component architecture
 
-🏗 Production Build
+Responsive design
+
+Clean and maintainable codebase
+
+Build for Production
+
+To create an optimized production build:
+
 npm run build
 npm start
 
-👤 Author
+Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+Next.js Documentation
+
+Learn Next.js
+
+Next.js GitHub Repository
+
+Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the Vercel Platform, from the creators of Next.js.
+
+Check out the Next.js deployment documentation
+ for more details.
+
+Author
 
 Shuvroto Kumar
 Frontend Developer | Next.js & React
-
-📄 License
-
-For educational and internal use.
